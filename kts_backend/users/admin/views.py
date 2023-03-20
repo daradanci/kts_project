@@ -15,8 +15,12 @@ from aiohttp_apispec import request_schema, response_schema, docs
 from aiohttp_session import new_session, get_session
 
 from kts_backend.users.admin.models import Admin
-from kts_backend.users.admin.schemes import AdminLoginSchema, AdminLoginResponseSchema
+from kts_backend.users.admin.schemes import (
+    AdminLoginSchema,
+    AdminLoginResponseSchema,
+)
 from kts_backend.web.app import View
+
 # from aiohttp.web_response import json_response
 from kts_backend.web.utils import json_response
 from hashlib import sha256
@@ -34,27 +38,34 @@ class AdminLoginView(View):
         # data = self.request["data"]
 
         data = self.data
-        _admin = await self.store.admins.get_by_email(email=data['email'])
+        _admin = await self.store.admins.get_by_email(email=data["email"])
         if _admin is None:
-            raise HTTPForbidden(reason='No admin with requested email')
+            raise HTTPForbidden(reason="No admin with requested email")
 
-        print('REQUEST.PASSWORD:', data['password'])
-        print('EXISTING_PASSWORD:', sha256(_admin.password.encode()).hexdigest())
+        print("REQUEST.PASSWORD:", data["password"])
+        print(
+            "EXISTING_PASSWORD:", sha256(_admin.password.encode()).hexdigest()
+        )
         # print('EXISTING_PASSWORD:', _admin.password)
         # if 'password' in data and data['password'] == base64.b64decode(_admin.password).decode('ascii'):
-        if 'password' in data and  _admin.password==sha256(data['password'].encode()).hexdigest():
+        if (
+            "password" in data
+            and _admin.password == sha256(data["password"].encode()).hexdigest()
+        ):
             session = await new_session(request=self.request)
-            session['admin'] = json.dumps({"id": _admin.id, "email": _admin.email})
-            print('LOGGED SUCCESSFULLY')
-            print(session['admin'])
+            session["admin"] = json.dumps(
+                {"id": _admin.id, "email": _admin.email}
+            )
+            print("LOGGED SUCCESSFULLY")
+            print(session["admin"])
             return json_response(
                 data={
                     # AdminLoginResponseSchema().dump(_admin)
                     #
                     "id": _admin.id,
                     "email": _admin.email,
-
-                })
+                }
+            )
         raise HTTPForbidden
 
 
@@ -63,8 +74,4 @@ class AdminCurrentView(AuthRequiredMixin, View):
     @response_schema(OkResponseSchema)
     async def get(self):
         _admin = self.request.admin
-        return json_response(data={
-            "id": _admin.id,
-            "email": _admin.email
-
-        })
+        return json_response(data={"id": _admin.id, "email": _admin.email})

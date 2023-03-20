@@ -1,8 +1,13 @@
 from typing import Optional, TYPE_CHECKING, Callable
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base, Session,sessionmaker
-from sqlalchemy import select, text,exc
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    create_async_engine,
+)
+from sqlalchemy.orm import declarative_base, Session, sessionmaker
+from sqlalchemy import select, text, exc
+
 # from app.quiz.models import Theme, ThemeModel
 # from kts_backend.store.database import db
 from kts_backend.store.database.sqlalchemy_base import db
@@ -18,22 +23,22 @@ class Database:
         self._db: Optional[declarative_base] = None
         self.session: Optional[Callable[[], AsyncSession]] = None
 
-
     async def connect(self, *_: list, **__: dict) -> None:
         self._db = db
         # echo=True,future=True
-        self._engine = create_async_engine('postgresql+asyncpg://kts_user:kts_pass@localhost/KTS_db')
-        print('CONNECTED to database successfully')
-        self.session=sessionmaker(self._engine,expire_on_commit=False, class_=AsyncSession)
-
+        self._engine = create_async_engine(
+            "postgresql+asyncpg://kts_user:kts_pass@localhost/KTS_db"
+        )
+        print("CONNECTED to database successfully")
+        self.session = sessionmaker(
+            self._engine, expire_on_commit=False, class_=AsyncSession
+        )
 
         # with self.session as session:
 
-
-            # stmt=text("""insert into themes (title) values ('web7777')""")
-            # res=await self.session.execute(stmt)
-            # await self.session.commit()
-
+        # stmt=text("""insert into themes (title) values ('web7777')""")
+        # res=await self.session.execute(stmt)
+        # await self.session.commit()
 
         # async with self._engine.connect() as conn:
         #     await conn.execute(text("""insert into themes (title) values ('web37722')"""))

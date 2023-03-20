@@ -4,7 +4,8 @@ from kts_backend.users.quiz.views import (
     QuestionAddView,
     QuestionListView,
     ThemeAddView,
-    ThemeListView, TestView
+    ThemeListView,
+    TestView,
 )
 
 if typing.TYPE_CHECKING:

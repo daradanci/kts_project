@@ -38,7 +38,6 @@ class TgApiAccessor(BaseAccessor):
         if self.poller:
             await self.poller.stop()
 
-
     @staticmethod
     def _build_query(host: str, method: str, params: dict) -> str:
         url = host + method + "?"
@@ -48,17 +47,15 @@ class TgApiAccessor(BaseAccessor):
         url += "&".join([f"{k}={v}" for k, v in params.items()])
         return url
 
-
     async def poll(self):
         async with self.session.get(
             self._build_query(
-                host=API_PATH+f"bot{self.app.config.bot.token}/",
+                host=API_PATH + f"bot{self.app.config.bot.token}/",
                 method="getUpdates",
                 params={
-                    'offset':self.offset,
-                    'allowed_updates':['message'],
-                    'timeout':30
-
+                    "offset": self.offset,
+                    "allowed_updates": ["message"],
+                    "timeout": 30,
                 },
             )
         ) as resp:
@@ -71,18 +68,19 @@ class TgApiAccessor(BaseAccessor):
             for update in raw_updates:
                 self.logger.info(update)
 
-                if 'my_chat_member' not in update:
+                if "my_chat_member" not in update:
                     updates.append(
                         Update(
                             update_id=update["update_id"],
                             object=UpdateObject(
                                 # message_id=update['message']['message_id'],
-                                chat_id=update['message']["chat"]["id"],
-                                user_id=update['message']['from']['id'],
+                                chat_id=update["message"]["chat"]["id"],
+                                user_id=update["message"]["from"]["id"],
                                 # username=update['message']['from']['username'],
-                                body= update['message']["text"] if 'text' in update['message'] else '🧐',
+                                body=update["message"]["text"]
+                                if "text" in update["message"]
+                                else "🧐",
                                 # body='1010010011',
-
                             ),
                         )
                     )
@@ -94,7 +92,7 @@ class TgApiAccessor(BaseAccessor):
     async def send_message(self, message: Message) -> None:
         async with self.session.get(
             self._build_query(
-                API_PATH+f"bot{self.app.config.bot.token}/",
+                API_PATH + f"bot{self.app.config.bot.token}/",
                 "sendMessage",
                 params={
                     "chat_id": message.chat_id,
@@ -105,31 +103,30 @@ class TgApiAccessor(BaseAccessor):
             data = await resp.json()
             self.logger.info(data)
 
-    async def get_chat_info(self, chat_id:int,tg_id:Optional[int]):
+    async def get_chat_info(self, chat_id: int, tg_id: Optional[int]):
         if tg_id:
             async with self.session.get(
-                    self._build_query(
-                        API_PATH + f"bot{self.app.config.bot.token}/",
-                        "getChatMember",
-                        params={
-                            "chat_id": chat_id,
-                            "user_id":tg_id,
-
-                        },
-                    )
+                self._build_query(
+                    API_PATH + f"bot{self.app.config.bot.token}/",
+                    "getChatMember",
+                    params={
+                        "chat_id": chat_id,
+                        "user_id": tg_id,
+                    },
+                )
             ) as resp:
                 data = await resp.json()
                 self.logger.info(data)
             return data
         else:
             async with self.session.get(
-                    self._build_query(
-                        API_PATH + f"bot{self.app.config.bot.token}/",
-                        "getChat",
-                        params={
-                            "chat_id": chat_id,
-                        },
-                    )
+                self._build_query(
+                    API_PATH + f"bot{self.app.config.bot.token}/",
+                    "getChat",
+                    params={
+                        "chat_id": chat_id,
+                    },
+                )
             ) as resp:
                 data = await resp.json()
                 self.logger.info(data)

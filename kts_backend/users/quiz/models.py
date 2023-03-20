@@ -27,24 +27,33 @@ class Answer:
 
 class ThemeModel(db):
     __tablename__ = "themes"
-    id=Column(Integer,primary_key=True,index=True,unique=True)
-    title=Column(String, unique=True)
-    questions=relationship("QuestionModel", backref="themes", cascade="all, delete")
+    id = Column(Integer, primary_key=True, index=True, unique=True)
+    title = Column(String, unique=True)
+    questions = relationship(
+        "QuestionModel", backref="themes", cascade="all, delete"
+    )
 
 
 class QuestionModel(db):
     __tablename__ = "questions"
     id = Column(Integer, primary_key=True, index=True, unique=True)
     title = Column(String, unique=True)
-    theme_id=Column(Integer, ForeignKey("themes.id", ondelete='CASCADE'),nullable=False)
-    answers=relationship("AnswerModel", backref="questions", cascade="all, delete", lazy='subquery')
+    theme_id = Column(
+        Integer, ForeignKey("themes.id", ondelete="CASCADE"), nullable=False
+    )
+    answers = relationship(
+        "AnswerModel",
+        backref="questions",
+        cascade="all, delete",
+        lazy="subquery",
+    )
 
 
 class AnswerModel(db):
     __tablename__ = "answers"
     id = Column(Integer, primary_key=True, index=True, unique=True)
     title = Column(String)
-    is_correct=Column(Boolean)
-    question_id=Column(Integer, ForeignKey("questions.id", ondelete='CASCADE'))
-
-
+    is_correct = Column(Boolean)
+    question_id = Column(
+        Integer, ForeignKey("questions.id", ondelete="CASCADE")
+    )

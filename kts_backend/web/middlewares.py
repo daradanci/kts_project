@@ -24,8 +24,6 @@ async def auth_middleware(request: "Request", handler: callable):
     return await handler(request)
 
 
-
-
 HTTP_ERROR_CODES = {
     400: "bad_request",
     401: "unauthorized",
@@ -50,13 +48,13 @@ async def error_handling_middleware(request: "Request", handler):
             data=json.loads(e.text),
         )
     except IntegrityError as e:
-        correct_status=500
+        correct_status = 500
         if e.orig.pgcode == "23505":
-            correct_status=409
+            correct_status = 409
         if e.orig.pgcode == "23502":
-            correct_status=400
+            correct_status = 400
         if e.orig.pgcode == "23503":
-            correct_status=404
+            correct_status = 404
         return error_json_response(
             http_status=correct_status,
             status=HTTP_ERROR_CODES[correct_status],
@@ -76,14 +74,13 @@ async def error_handling_middleware(request: "Request", handler):
 
 
 def setup_middlewares(app: "Application"):
-    app.config.session.key=base64.urlsafe_b64decode(Fernet.generate_key())
+    app.config.session.key = base64.urlsafe_b64decode(Fernet.generate_key())
 
     app.middlewares.append(error_handling_middleware)
     app.middlewares.append(validation_middleware)
-    app.middlewares.append(session_middleware(EncryptedCookieStorage(app.config.session.key)))
+    app.middlewares.append(
+        session_middleware(EncryptedCookieStorage(app.config.session.key))
+    )
 
     print("KEY KEY KEY", app.config.session.key)
     app.middlewares.append(auth_middleware)
-
-
-

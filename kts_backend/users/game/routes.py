@@ -1,7 +1,9 @@
 import typing
 
 from kts_backend.users.game.views import (
-        GetGameInfoView, StartGameView, GetChatInfoView
+    GetGameInfoView,
+    StartGameView,
+    GetChatInfoView,
 )
 
 if typing.TYPE_CHECKING:

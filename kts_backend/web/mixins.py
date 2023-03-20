@@ -12,4 +12,3 @@ class AuthRequiredMixin:
         if not getattr(self.request, "admin", None):
             raise HTTPUnauthorized
         return await super(AuthRequiredMixin, self)._iter()
-

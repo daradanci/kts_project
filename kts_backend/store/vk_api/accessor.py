@@ -41,7 +41,6 @@ class VkApiAccessor(BaseAccessor):
         if self.poller:
             await self.poller.stop()
 
-
     @staticmethod
     def _build_query(host: str, method: str, params: dict) -> str:
         url = host + method + "?"
@@ -78,7 +77,7 @@ class VkApiAccessor(BaseAccessor):
                     "key": self.key,
                     "ts": self.ts,
                     "wait": 30,
-                    "access_token": self.app.config.bot.token
+                    "access_token": self.app.config.bot.token,
                 },
             )
         ) as resp:
@@ -92,9 +91,9 @@ class VkApiAccessor(BaseAccessor):
                     Update(
                         type=update["type"],
                         object=UpdateObject(
-                            id=update["object"]['message']["id"],
-                            user_id=update["object"]['message']["from_id"],
-                            body=update["object"]['message']["text"],
+                            id=update["object"]["message"]["id"],
+                            user_id=update["object"]["message"]["from_id"],
+                            body=update["object"]["message"]["text"],
                         ),
                     )
                 )

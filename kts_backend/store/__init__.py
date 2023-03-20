@@ -16,8 +16,8 @@ class Store:
 
         self.quizzes = QuizAccessor(app)
         self.admins = AdminAccessor(app)
-        self.tg_api=TgApiAccessor(app)
-        self.game=GameAccessor(app)
+        self.tg_api = TgApiAccessor(app)
+        self.game = GameAccessor(app)
         self.bots_manager = BotManager(app)
 
 

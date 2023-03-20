@@ -18,7 +18,7 @@ class Admin:
 
     @classmethod
     def from_session(cls, session: Optional[dict]) -> Optional["Admin"]:
-        session_admin=ast.literal_eval(session['admin'])
+        session_admin = ast.literal_eval(session["admin"])
         return cls(id=session_admin["id"], email=session_admin["email"])
         # return cls(id=session["admin"]["id"], email=session["admin"]["email"])
 
@@ -26,7 +26,5 @@ class Admin:
 class AdminModel(db):
     __tablename__ = "admins"
     id = Column(Integer, primary_key=True, index=True, unique=True)
-    email=Column(String, unique=True, nullable=False)
-    password=Column(String)
-
-
+    email = Column(String, unique=True, nullable=False)
+    password = Column(String)
