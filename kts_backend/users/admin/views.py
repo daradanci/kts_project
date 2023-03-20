@@ -2,9 +2,9 @@ from aiohttp.web import HTTPForbidden, HTTPUnauthorized
 from aiohttp_apispec import request_schema, response_schema
 from aiohttp_session import new_session
 
-from app.admin.schemes import AdminSchema
-from app.web.app import View
-from app.web.utils import json_response
+from kts_backend.users.admin.schemes import AdminSchema
+from kts_backend.web.app import View
+from kts_backend.web.utils import json_response
 import ast
 import base64
 import json
@@ -14,16 +14,16 @@ from aiohttp.web_exceptions import HTTPForbidden, HTTPUnauthorized
 from aiohttp_apispec import request_schema, response_schema, docs
 from aiohttp_session import new_session, get_session
 
-from app.admin.models import Admin
-from app.admin.schemes import AdminLoginSchema, AdminLoginResponseSchema
-from app.web.app import View
+from kts_backend.users.admin.models import Admin
+from kts_backend.users.admin.schemes import AdminLoginSchema, AdminLoginResponseSchema
+from kts_backend.web.app import View
 # from aiohttp.web_response import json_response
-from app.web.utils import json_response
+from kts_backend.web.utils import json_response
 from hashlib import sha256
 
-from app.web.schemes import OkResponseSchema
-from app.store.admin.accessor import AdminAccessor
-from app.web.mixins import AuthRequiredMixin
+from kts_backend.web.schemes import OkResponseSchema
+from kts_backend.store.admin.accessor import AdminAccessor
+from kts_backend.web.mixins import AuthRequiredMixin
 
 
 class AdminLoginView(View):
@@ -40,6 +40,7 @@ class AdminLoginView(View):
 
         print('REQUEST.PASSWORD:', data['password'])
         print('EXISTING_PASSWORD:', sha256(_admin.password.encode()).hexdigest())
+        # print('EXISTING_PASSWORD:', _admin.password)
         # if 'password' in data and data['password'] == base64.b64decode(_admin.password).decode('ascii'):
         if 'password' in data and  _admin.password==sha256(data['password'].encode()).hexdigest():
             session = await new_session(request=self.request)

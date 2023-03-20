@@ -9,11 +9,11 @@ from aiohttp_session import get_session, session_middleware
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from cryptography.fernet import Fernet
 from sqlalchemy.exc import IntegrityError
-from app.admin.models import Admin
-from app.web.utils import error_json_response
+from kts_backend.users.admin.models import Admin
+from kts_backend.web.utils import error_json_response
 
 if typing.TYPE_CHECKING:
-    from app.web.app import Application, Request
+    from kts_backend.web.app import Application, Request
 
 
 @middleware

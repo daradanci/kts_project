@@ -8,11 +8,11 @@ from aiohttp.test_utils import TestClient, loop_context
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.admin.models import Admin, AdminModel
-from app.store import Database
-from app.store import Store
-from app.web.app import setup_app
-from app.web.config import Config
+from kts_backend.users.admin.models import Admin, AdminModel
+from kts_backend.store import Database
+from kts_backend.store import Store
+from kts_backend.web.app import setup_app
+from kts_backend.web.config import Config
 
 
 @pytest.fixture(scope="session")
@@ -30,8 +30,8 @@ def server():
     )
     app.on_startup.clear()
     app.on_shutdown.clear()
-    app.store.vk_api = AsyncMock()
-    app.store.vk_api.send_message = AsyncMock()
+    app.store.tg_api = AsyncMock()
+    app.store.tg_api.send_message = AsyncMock()
 
     app.database = Database(app)
     app.on_startup.append(app.database.connect)
@@ -77,25 +77,3 @@ def cli(aiohttp_client, event_loop, server) -> TestClient:
     return event_loop.run_until_complete(aiohttp_client(server))
 
 
-@pytest.fixture
-async def authed_cli(cli, config) -> TestClient:
-    await cli.post(
-        "/admin.login",
-        data={
-            "email": config.admin.email,
-            "password": config.admin.password,
-        },
-    )
-    yield cli
-
-
-@pytest.fixture(autouse=True)
-async def admin(cli, db_session, config: Config) -> Admin:
-    new_admin = AdminModel(
-        email=config.admin.email,
-        password=sha256(config.admin.password.encode()).hexdigest(),
-    )
-    async with db_session.begin() as session:
-        session.add(new_admin)
-
-    return Admin(id=new_admin.id, email=new_admin.email)

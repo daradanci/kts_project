@@ -3,14 +3,14 @@ import typing
 from hashlib import sha256
 from typing import Optional
 from cryptography.fernet import Fernet
-from app.store.database.database import Database
+from kts_backend.store.database.database import Database
 
-from app.base.base_accessor import BaseAccessor
-from app.admin.models import Admin, AdminModel
+from kts_backend.store.base.base_accessor import BaseAccessor
+from kts_backend.users.admin.models import Admin, AdminModel
 from sqlalchemy import select, text, exc, delete, insert
 
 if typing.TYPE_CHECKING:
-    from app.web.app import Application
+    from kts_backend.web.app import Application
 
 
 class AdminAccessor(BaseAccessor):

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from hashlib import sha256
 from typing import Optional
 
-from app.store.database.sqlalchemy_base import db
+from kts_backend.store.database.sqlalchemy_base import db
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 
 

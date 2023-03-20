@@ -4,14 +4,14 @@ from aiohttp.web_exceptions import HTTPNotFound, HTTPUnauthorized, HTTPForbidden
 from aiohttp_apispec import response_schema, docs, request_schema
 from sqlalchemy.orm import class_mapper
 
-from app.quiz.models import Answer
-from app.quiz.schemes import (
+from kts_backend.users.quiz.models import Answer
+from kts_backend.users.quiz.schemes import (
     ThemeSchema, ThemeListSchema, ThemeListResponseSchema, QuestionSchema,
 )
-from app.web.app import View
-from app.web.schemes import OkResponseSchema
-from app.web.utils import json_response
-from app.web.mixins import AuthRequiredMixin
+from kts_backend.web.app import View
+from kts_backend.web.schemes import OkResponseSchema
+from kts_backend.web.utils import json_response
+from kts_backend.web.mixins import AuthRequiredMixin
 
 
 class ThemeAddView(AuthRequiredMixin,View):
@@ -23,9 +23,6 @@ class ThemeAddView(AuthRequiredMixin,View):
             title = self.data["title"]
         else:
             raise HTTPBadRequest
-        # if await self.store.quizzes.get_theme_by_title(title) is not None:
-        #     raise HTTPConflict(reason=f"Тема под названием '{title}' уже существует.")
-        #
         theme = await self.store.quizzes.create_theme(title=title)
         return json_response(data=ThemeSchema().dump(theme))
 
@@ -49,10 +46,6 @@ class QuestionAddView(AuthRequiredMixin,View):
                                                              answers=[Answer(title=answer['title'],
                                                                              is_correct=answer['is_correct'])
                                                                       for answer in self.data['answers']])
-        # _answers=await self.store.quizzes.create_answers(question_id=_question.id,
-        #                                                  answers=[Answer(title=answer['title'],
-        #                                                                  is_correct=answer['is_correct'])
-        #                                                           for answer in self.data['answers']])
         return json_response(data= {
             'id': _question.id,
             'title': _question.title,

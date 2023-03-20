@@ -1,10 +1,10 @@
 import typing
 from logging import getLogger
 
-from app.store.vk_api.dataclasses import Message, Update
+from kts_backend.store.tg_api.dataclasses import Message, Update
 
 if typing.TYPE_CHECKING:
-    from app.web.app import Application
+    from kts_backend.web.app import Application
 
 
 class BotManager:
@@ -15,9 +15,9 @@ class BotManager:
 
     async def handle_updates(self, updates: list[Update]):
         for update in updates:
-            await self.app.store.vk_api.send_message(
+            await self.app.store.tg_api.send_message(
                 Message(
-                    user_id=update.object.user_id,
-                    text="Don't talk to me.",
+                    chat_id=update.object.chat_id,
+                    text=update.object.body,
                 )
             )

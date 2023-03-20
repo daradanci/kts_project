@@ -12,7 +12,8 @@ database:
   password: kts_pass
   database: kts
 bot:
-  token: vk1.a.TkqTLu2BVvOEipUxKgjo3jaF5cXaNAl80J_ESSDV2yaeeG66DdYYxoZ928rAxziNpbKhUhdLngfxmqrxRxbKzIquUaP1C9gS8ERN0W0dJX-vnOMdHiWmapsEIuleQxin9wPcgyVIrv3lng4a5yYPs2-WeOYljtleXUfO09mgyJQaYG9eViHgYBioZo7RJ2HBPQsR9IRhbYcoeaEty0QIEg
+#  token: vk1.a.TkqTLu2BVvOEipUxKgjo3jaF5cXaNAl80J_ESSDV2yaeeG66DdYYxoZ928rAxziNpbKhUhdLngfxmqrxRxbKzIquUaP1C9gS8ERN0W0dJX-vnOMdHiWmapsEIuleQxin9wPcgyVIrv3lng4a5yYPs2-WeOYljtleXUfO09mgyJQaYG9eViHgYBioZo7RJ2HBPQsR9IRhbYcoeaEty0QIEg
+  token: 5834755833:AAHkdoMx-zzVxHkzLM96sLKD7-wV4tueyUU
   group_id: 211873029
 
 

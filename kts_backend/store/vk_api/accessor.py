@@ -5,12 +5,12 @@ from typing import Optional
 from aiohttp import TCPConnector
 from aiohttp.client import ClientSession
 
-from app.base.base_accessor import BaseAccessor
-from app.store.vk_api.dataclasses import Message, Update, UpdateObject
-from app.store.vk_api.poller import Poller
+from kts_backend.store.base.base_accessor import BaseAccessor
+from kts_backend.store.vk_api.dataclasses import Message, Update, UpdateObject
+from kts_backend.store.vk_api.poller import Poller
 
 if typing.TYPE_CHECKING:
-    from app.web.app import Application
+    from kts_backend.web.app import Application
 
 API_PATH = "https://api.vk.com/method/"
 
@@ -37,8 +37,10 @@ class VkApiAccessor(BaseAccessor):
     async def disconnect(self, app: "Application"):
         if self.session:
             await self.session.close()
+            self.session = None
         if self.poller:
             await self.poller.stop()
+
 
     @staticmethod
     def _build_query(host: str, method: str, params: dict) -> str:
@@ -76,6 +78,7 @@ class VkApiAccessor(BaseAccessor):
                     "key": self.key,
                     "ts": self.ts,
                     "wait": 30,
+                    "access_token": self.app.config.bot.token
                 },
             )
         ) as resp:
@@ -85,8 +88,6 @@ class VkApiAccessor(BaseAccessor):
             raw_updates = data.get("updates", [])
             updates = []
             for update in raw_updates:
-                print('U', update['object'])
-                print('U', type(update['object']))
                 updates.append(
                     Update(
                         type=update["type"],
@@ -106,8 +107,8 @@ class VkApiAccessor(BaseAccessor):
                 "messages.send",
                 params={
                     "user_id": message.user_id,
-                    "random_id": random.randint(1, 2**32),
-                    "peer_id": "-" + str(self.app.config.bot.group_id),
+                    "random_id": random.randint(1, 1024),
+                    # "peer_id": "-" + str(self.app.config.bot.group_id),
                     "message": message.text,
                     "access_token": self.app.config.bot.token,
                 },

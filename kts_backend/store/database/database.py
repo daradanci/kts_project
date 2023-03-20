@@ -3,10 +3,12 @@ from typing import Optional, TYPE_CHECKING, Callable
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, Session,sessionmaker
 from sqlalchemy import select, text,exc
-from app.quiz.models import Theme, ThemeModel
-from app.store.database import db
+# from app.quiz.models import Theme, ThemeModel
+# from kts_backend.store.database import db
+from kts_backend.store.database.sqlalchemy_base import db
+
 if TYPE_CHECKING:
-    from app.web.app import Application
+    from kts_backend.web.app import Application
 
 
 class Database:
@@ -20,7 +22,7 @@ class Database:
     async def connect(self, *_: list, **__: dict) -> None:
         self._db = db
         # echo=True,future=True
-        self._engine = create_async_engine('postgresql+asyncpg://kts_user:kts_pass@localhost/kts')
+        self._engine = create_async_engine('postgresql+asyncpg://kts_user:kts_pass@localhost/KTS_db')
         print('CONNECTED to database successfully')
         self.session=sessionmaker(self._engine,expire_on_commit=False, class_=AsyncSession)
 

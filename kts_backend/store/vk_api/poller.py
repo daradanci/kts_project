@@ -2,7 +2,7 @@ import asyncio
 from asyncio import Task
 from typing import Optional
 
-from app.store import Store
+from kts_backend.store import Store
 
 
 class Poller:
@@ -22,4 +22,5 @@ class Poller:
     async def poll(self):
         while self.is_running:
             updates = await self.store.vk_api.poll()
-            await self.store.bots_manager.handle_updates(updates)
+            if updates:
+                await self.store.bots_manager.handle_updates(updates)

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import yaml
 
 if typing.TYPE_CHECKING:
-    from app.web.app import Application
+    from kts_backend.web.app import Application
 
 
 @dataclass

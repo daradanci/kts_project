@@ -1,24 +1,26 @@
-# from app.quiz.models import Answer, Question, Theme
-#
-#
-# def theme2dict(theme: Theme):
-#     return {
-#         "id": int(theme.id),
-#         "title": str(theme.title),
-#     }
-#
-#
-# def question2dict(question: Question):
-#     return {
-#         "id": int(question.id),
-#         "title": str(question.title),
-#         "theme_id": int(question.theme_id),
-#         "answers": [answer2dict(answer) for answer in question.answers],
-#     }
-#
-#
-# def answer2dict(answer: Answer):
-#     return {
-#         "title": answer.title,
-#         "is_correct": answer.is_correct,
-#     }
+
+from kts_backend.users.game.models import GameDC, GameScoreDC, PlayerDC
+
+
+def score2dict(score: GameScoreDC):
+    return {
+        "points": int(score.points),
+    }
+
+
+def game2dict(game: GameDC):
+    return {
+        "id": int(game.id),
+        "created_at": game.created_at,
+        "chat_id": int(game.chat_id),
+        "players": [player2dict(player) for player in game.players],
+    }
+
+
+def player2dict(player: PlayerDC):
+    return {
+        "tg_id": int(player.tg_id),
+        "name": str(player.name),
+        "last_name": str(player.last_name),
+        "score": [score2dict(score) for score in player.score]
+    }

@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
-
-from app.store.database.sqlalchemy_base import db
+from kts_backend.store.database.sqlalchemy_base import db
 from typing import Optional
+
 
 @dataclass
 class Theme:
@@ -39,6 +38,7 @@ class QuestionModel(db):
     title = Column(String, unique=True)
     theme_id=Column(Integer, ForeignKey("themes.id", ondelete='CASCADE'),nullable=False)
     answers=relationship("AnswerModel", backref="questions", cascade="all, delete", lazy='subquery')
+
 
 class AnswerModel(db):
     __tablename__ = "answers"
